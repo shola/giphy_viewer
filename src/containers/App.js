@@ -1,105 +1,78 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit } from '../actions';
-import Picker from '../components/Picker';
-import Posts from '../components/Posts';
+import { fetchGifs, selectGiphy, filterGiphys } from '../actions';
+import Tile from '../components/Tile';
+import FeaturedTile from '../components/FeaturedTile';
 
-// This component has no state! it's props are handled by redux,
-// so there is no need to have state local to the container
 class App extends Component {
-    // this.props has the entire redux state in it, plus the dispatch method
-    // Because of the react-redux connect function?
     static propTypes = {
-        selectedSubreddit: PropTypes.string.isRequired,
-        posts: PropTypes.array.isRequired,
-        isFetching: PropTypes.bool.isRequired,
-        lastUpdated: PropTypes.number,
-        dispatch: PropTypes.func.isRequired
+        isFetchingGifs: PropTypes.bool.isRequired,
+        images: PropTypes.Object,
+        dispatch: PropTypes.func.isRequired,
+        selectedGiphy: PropTypes.object
     };
 
     componentDidMount() {
-        debugger;
-        const { dispatch, selectedSubreddit } = this.props;
-        dispatch(fetchPostsIfNeeded(selectedSubreddit));
+        this.props.dispatch(fetchGifs());
     }
 
-    componentWillReceiveProps(nextProps) {
-        debugger;
-        if (nextProps.selectedSubreddit !== this.props.selectedSubreddit) {
-            const { dispatch, selectedSubreddit } = nextProps;
-            dispatch(fetchPostsIfNeeded(selectedSubreddit));
-        }
-    }
+    componentWillReceiveProps(nextProps) {}
 
-    handleChange = nextSubreddit => {
-        debugger;
-        this.props.dispatch(selectSubreddit(nextSubreddit));
+    handleSearch = e => {
+        const searchTerm = e.target.value;
+        this.props.dispatch(filterGiphys(searchTerm));
     };
 
-    handleRefreshClick = e => {
-        debugger;
+    handleGifClick = e => {
         e.preventDefault();
 
-        const { dispatch, selectedSubreddit } = this.props;
-        dispatch(invalidateSubreddit(selectedSubreddit));
-        dispatch(fetchPostsIfNeeded(selectedSubreddit));
+        const img = this.props.images[e.target.id];
+        this.props.dispatch(selectGiphy(img));
     };
 
     render() {
-        const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props;
-        const isEmpty = posts.length === 0;
-        debugger;
+        const { selectedGiphy, searchTerm, images } = this.props;
         return (
             <div>
-                <Picker
-                    value={selectedSubreddit}
-                    onChange={this.handleChange}
-                    options={['reactjs', 'frontend']}
-                />
-                <p>
-                    {lastUpdated && (
-                        <span>
-                            Last updated at {new Date(lastUpdated).toLocaleTimeString()}.{' '}
-                        </span>
-                    )}
-                    {!isFetching && (
-                        <button onClick={this.handleRefreshClick}>Refresh</button>
-                    )}
-                </p>
-                {isEmpty ? (
-                    isFetching ? (
-                        <h2>Loading...</h2>
-                    ) : (
-                        <h2>Empty.</h2>
-                    )
+                {selectedGiphy.id ? (
+                    <FeaturedTile
+                        {...selectedGiphy}
+                        id={selectedGiphy.id}
+                        url={selectedGiphy.previewUrl}
+                    />
                 ) : (
-                    <div style={{ opacity: isFetching ? 0.5 : 1 }}>
-                        <Posts posts={posts} />
-                    </div>
+                    <div />
                 )}
+                <input onChange={this.handleSearch} />
+                {Object.values(images).map(img => {
+                    if (!searchTerm || img.title.indexOf(searchTerm) >= 0) {
+                        return (
+                            <Tile
+                                key={img.id}
+                                {...img}
+                                onClick={this.handleGifClick.bind(this)}
+                            />
+                        );
+                    }
+                })}
             </div>
         );
     }
 }
 
 const mapStateToProps = state => {
-    const { selectedSubreddit, postsBySubreddit } = state;
-    const { isFetching, lastUpdated, items: posts } = postsBySubreddit[
-        selectedSubreddit
-    ] || {
-        isFetching: true,
-        items: []
-    };
-    debugger;
+    const { selectedGiphy, searchTerm, giphy } = state;
+    const { images = {}, isFetchingGifs } = giphy;
+
     return {
-        selectedSubreddit,
-        posts,
-        isFetching,
-        lastUpdated
+        selectedGiphy,
+        images,
+        isFetchingGifs,
+        searchTerm
     };
 };
-debugger;
+
 // connect this redux store to the app.
 // now App must be wrapped in a <Provider store={store}> node
 export default connect(mapStateToProps)(App);

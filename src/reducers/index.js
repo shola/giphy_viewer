@@ -1,74 +1,44 @@
 import { combineReducers } from 'redux';
-import {
-    SELECT_SUBREDDIT,
-    INVALIDATE_SUBREDDIT,
-    REQUEST_POSTS,
-    RECEIVE_POSTS
-} from '../actions';
+import { FILTER_GIPHYS, RECEIVE_GIFS, REQUEST_GIFS, SELECT_GIPHY } from '../actions';
 
-const selectedSubreddit = (state = 'reactjs', action) => {
+const selectedGiphy = (state = {}, action) => {
     switch (action.type) {
-        case SELECT_SUBREDDIT:
-            return action.subreddit;
+        case SELECT_GIPHY:
+            return action.img ? action.img : {};
         default:
             return state;
     }
 };
-
-const posts = (
+const giphy = (
     state = {
-        isFetching: false,
-        didInvalidate: false,
-        items: []
+        isFetchingGifs: false,
+        images: {}
     },
     action
 ) => {
     switch (action.type) {
-        case INVALIDATE_SUBREDDIT:
-            debugger;
-            return {
-                ...state,
-                didInvalidate: true
-            };
-        case REQUEST_POSTS:
-            debugger;
-            return {
-                ...state,
-                isFetching: true,
-                didInvalidate: false
-            };
-        case RECEIVE_POSTS:
-            debugger;
-            return {
-                ...state,
-                isFetching: false,
-                didInvalidate: false,
-                items: action.posts,
-                lastUpdated: action.receivedAt
-            };
+        case REQUEST_GIFS:
+            return { ...state, isFetchingGifs: true };
+        case RECEIVE_GIFS:
+            return { ...state, isFetchingGifs: false, images: action.images };
         default:
             return state;
     }
 };
 
-const postsBySubreddit = (state = {}, action) => {
+const searchTerm = (state = '', action) => {
     switch (action.type) {
-        case INVALIDATE_SUBREDDIT:
-        case RECEIVE_POSTS:
-        case REQUEST_POSTS:
-            debugger;
-            return {
-                ...state,
-                [action.subreddit]: posts(state[action.subreddit], action)
-            };
+        case FILTER_GIPHYS:
+            return action.searchTerm;
         default:
             return state;
     }
 };
 
 const rootReducer = combineReducers({
-    postsBySubreddit,
-    selectedSubreddit
+    giphy,
+    selectedGiphy,
+    searchTerm
 });
 
 export default rootReducer;

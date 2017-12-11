@@ -19,9 +19,8 @@ if (process.env.NODE_ENV !== 'production') {
     middleware.push(createLogger());
 }
 
-debugger;
 const store = createStore(reducer, applyMiddleware(...middleware));
-debugger;
+
 render(
     <Provider store={store}>
         <App />
