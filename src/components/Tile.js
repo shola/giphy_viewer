@@ -2,17 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './Tile.css';
 
-const Tile = props => {
-    if (!props.searchTerm || props.title.indexOf(props.searchTerm) >= 0) {
-        return (
-            <img
-                className="tile"
-                key={props.id}
-                id={props.id}
-                src={props.previewUrl}
-                alt={props.title}
-            />
-        );
+function doShowTile(searchTerm, title) {
+    return !searchTerm || title.indexOf(searchTerm) >= 0;
+}
+
+const Tile = ({ searchTerm, title, id, previewUrl }) => {
+    if (doShowTile(searchTerm, title)) {
+        return <img className="tile" key={id} id={id} src={previewUrl} alt={title} />;
     } else {
         return <img alt={''} />;
     }
@@ -20,7 +16,6 @@ const Tile = props => {
 
 Tile.propTypes = {
     id: PropTypes.string.isRequired,
-    mp4: PropTypes.string,
     previewUrl: PropTypes.string.isRequired,
     sourceUrl: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,

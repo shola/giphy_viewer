@@ -9,6 +9,7 @@ const selectedGiphy = (state = {}, action) => {
             return state;
     }
 };
+
 const giphy = (
     state = {
         isFetchingGifs: false,

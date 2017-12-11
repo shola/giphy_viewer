@@ -25,8 +25,8 @@ export const receiveGifs = json => {
     json.data.forEach(d => {
         images[d.id] = {
             id: d.id,
-            previewUrl: d.images.preview_gif.url,
-            mp4: d.images.original.mp4,
+            previewUrl: d.images.fixed_height.url,
+            mp4: d.images.original_mp4.mp4,
             sourceUrl: d.source_post_url,
             title: d.title,
             trending_datetime: d.trending_datetime,

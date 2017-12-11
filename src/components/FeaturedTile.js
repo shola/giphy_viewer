@@ -2,10 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const FeaturedTile = props => {
-    // make the feature tile full of data, or empty if no tile is currently featured.
     if (props.id !== undefined) {
         return (
-            <dialog className="featured-tile" open>
+            <dialog
+                className="featured-tile"
+                open
+                style={{ position: 'absolute', top: props.y }}
+            >
                 <video src={props.mp4} alt={props.title} autoPlay={true} controls />
             </dialog>
         );

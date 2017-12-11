@@ -25,17 +25,26 @@ class App extends Component {
     };
 
     handleClick = e => {
+        // an onclick listener on the entire body is needed, to facilitate hiding and showing the featuredTile
         e.preventDefault();
-        const img = this.props.images[e.target.id];
-        this.props.dispatch(selectGiphy(img));
+
+        const videoClicked = e.target.nodeName === 'VIDEO';
+        if (videoClicked) {
+            // don't dispatch an action, just use the video node's controls
+        } else {
+            debugger;
+            const img = this.props.images[e.target.id];
+            const y = e.target.y;
+            this.props.dispatch(selectGiphy({ ...img, y }));
+        }
     };
 
     render() {
         const { selectedGiphy, searchTerm, images } = this.props;
         return (
             <div>
-                <FeaturedTile {...selectedGiphy} />
                 <div className="app-body" onClick={this.handleClick}>
+                    <FeaturedTile {...selectedGiphy} />
                     <input className="search-bar" onChange={this.handleSearch} />
                     <Tiles images={images} searchTerm={searchTerm} />
                 </div>
