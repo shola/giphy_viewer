@@ -8,7 +8,7 @@ import FeaturedTile from '../components/FeaturedTile';
 class App extends Component {
     static propTypes = {
         isFetchingGifs: PropTypes.bool.isRequired,
-        images: PropTypes.Object,
+        images: PropTypes.object,
         dispatch: PropTypes.func.isRequired,
         selectedGiphy: PropTypes.object
     };
@@ -45,17 +45,28 @@ class App extends Component {
                     <div />
                 )}
                 <input onChange={this.handleSearch} />
-                {Object.values(images).map(img => {
-                    if (!searchTerm || img.title.indexOf(searchTerm) >= 0) {
-                        return (
-                            <Tile
-                                key={img.id}
-                                {...img}
-                                onClick={this.handleGifClick.bind(this)}
-                            />
-                        );
-                    }
-                })}
+                <div
+                    className={'tiles'}
+                    style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        alignContent: 'space-around'
+                    }}
+                >
+                    {Object.values(images).map(img => {
+                        if (!searchTerm || img.title.indexOf(searchTerm) >= 0) {
+                            return (
+                                <Tile
+                                    key={img.id}
+                                    {...img}
+                                    onClick={this.handleGifClick.bind(this)}
+                                />
+                            );
+                        } else {
+                            return <div />;
+                        }
+                    })}
+                </div>
             </div>
         );
     }

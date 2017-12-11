@@ -9,4 +9,14 @@ const FeaturedTile = props => {
     );
 };
 
+FeaturedTile.propTypes = {
+    id: PropTypes.string.isRequired,
+    mp4: PropTypes.string.isRequired,
+    previewUrl: PropTypes.string.isRequired,
+    sourceUrl: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    trending_datetime: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired
+};
+
 export default FeaturedTile;
