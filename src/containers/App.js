@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchGifs, selectGiphy, filterGiphys } from '../actions';
-import Tile from '../components/Tile';
 import FeaturedTile from '../components/FeaturedTile';
+import Tiles from '../components/Tiles';
 
 class App extends Component {
     static propTypes = {
@@ -24,9 +24,8 @@ class App extends Component {
         this.props.dispatch(filterGiphys(searchTerm));
     };
 
-    handleGifClick = e => {
+    handleClick = e => {
         e.preventDefault();
-
         const img = this.props.images[e.target.id];
         this.props.dispatch(selectGiphy(img));
     };
@@ -35,37 +34,10 @@ class App extends Component {
         const { selectedGiphy, searchTerm, images } = this.props;
         return (
             <div>
-                {selectedGiphy.id ? (
-                    <FeaturedTile
-                        {...selectedGiphy}
-                        id={selectedGiphy.id}
-                        url={selectedGiphy.previewUrl}
-                    />
-                ) : (
-                    <div />
-                )}
-                <input onChange={this.handleSearch} />
-                <div
-                    className={'tiles'}
-                    style={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        alignContent: 'space-around'
-                    }}
-                >
-                    {Object.values(images).map(img => {
-                        if (!searchTerm || img.title.indexOf(searchTerm) >= 0) {
-                            return (
-                                <Tile
-                                    key={img.id}
-                                    {...img}
-                                    onClick={this.handleGifClick.bind(this)}
-                                />
-                            );
-                        } else {
-                            return <div />;
-                        }
-                    })}
+                <FeaturedTile {...selectedGiphy} />
+                <div className="app-body" onClick={this.handleClick}>
+                    <input className="search-bar" onChange={this.handleSearch} />
+                    <Tiles images={images} searchTerm={searchTerm} />
                 </div>
             </div>
         );

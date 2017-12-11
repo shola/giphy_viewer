@@ -1,4 +1,4 @@
-import apiKey from '../api_key';
+import apiKey from '../api_key'; // your private Giphy API Key
 export const REQUEST_GIFS = 'REQUEST_GIFS';
 export const RECEIVE_GIFS = 'RECEIVE_GIFS';
 export const SELECT_GIPHY = 'SELECT_GIPHY';
@@ -20,6 +20,8 @@ export const requestGifs = () => ({
 
 export const receiveGifs = json => {
     const images = {};
+
+    // saving the images by their ID makes it easy to access them from the container
     json.data.forEach(d => {
         images[d.id] = {
             id: d.id,
@@ -31,6 +33,7 @@ export const receiveGifs = json => {
             username: d.username
         };
     });
+
     return {
         type: RECEIVE_GIFS,
         images
@@ -39,8 +42,10 @@ export const receiveGifs = json => {
 
 // Async action creator
 export const fetchGifs = () => dispatch => {
+    // let redux know the request has started
     dispatch(requestGifs());
 
+    // the last dispatch lets redux know that gifs are received and the request is done
     return fetch(`http://api.giphy.com/v1/gifs/trending?api_key=${apiKey}`)
         .then(response => response.json())
         .then(json => dispatch(receiveGifs(json)));

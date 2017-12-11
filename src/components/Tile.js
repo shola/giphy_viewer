@@ -1,18 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './Tile.css';
 
 const Tile = props => {
-    return (
-        <div onClick={props.onClick}>
+    if (!props.searchTerm || props.title.indexOf(props.searchTerm) >= 0) {
+        return (
             <img
+                className="tile"
                 key={props.id}
                 id={props.id}
                 src={props.previewUrl}
                 alt={props.title}
-                style={{ height: 200 }}
             />
-        </div>
-    );
+        );
+    } else {
+        return <img alt={''} />;
+    }
 };
 
 Tile.propTypes = {
@@ -22,7 +25,8 @@ Tile.propTypes = {
     sourceUrl: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     trending_datetime: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired
+    username: PropTypes.string.isRequired,
+    searchTerm: PropTypes.string
 };
 
 export default Tile;

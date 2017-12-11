@@ -1,0 +1,5 @@
+.tiles {
+    display: 'flex';
+    flexwrap: 'wrap';
+    aligncontent: 'space-around';
+}
