@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fetchGifs, selectGiphy, filterGiphys } from '../actions';
 import FeaturedTile from '../components/FeaturedTile';
 import Tiles from '../components/Tiles';
+import SearchBar from '../components/SearchBar';
 
 class App extends Component {
     static propTypes = {
@@ -32,7 +33,6 @@ class App extends Component {
         if (videoClicked) {
             // don't dispatch an action, just use the video node's controls
         } else {
-            debugger;
             const img = this.props.images[e.target.id];
             const y = e.target.y;
             this.props.dispatch(selectGiphy({ ...img, y }));
@@ -45,7 +45,7 @@ class App extends Component {
             <div>
                 <div className="app-body" onClick={this.handleClick}>
                     <FeaturedTile {...selectedGiphy} />
-                    <input className="search-bar" onChange={this.handleSearch} />
+                    <SearchBar onChange={this.handleSearch.bind(this)} />
                     <Tiles images={images} searchTerm={searchTerm} />
                 </div>
             </div>
@@ -54,6 +54,7 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
+    // Whenever the store changes, update the props that are sent to the container
     const { selectedGiphy, searchTerm, giphy } = state;
     const { images = {}, isFetchingGifs } = giphy;
 

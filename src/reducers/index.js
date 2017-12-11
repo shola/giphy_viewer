@@ -36,6 +36,9 @@ const searchTerm = (state = '', action) => {
     }
 };
 
+// By convention, these reducers should map directly to state attributes.
+// However, mapToProps ultimately decides how the container component will
+// receive the props from the store.
 const rootReducer = combineReducers({
     giphy,
     selectedGiphy,

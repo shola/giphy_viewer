@@ -3,12 +3,9 @@ import PropTypes from 'prop-types';
 
 const FeaturedTile = props => {
     if (props.id !== undefined) {
+        const style = { position: 'absolute', top: props.y };
         return (
-            <dialog
-                className="featured-tile"
-                open
-                style={{ position: 'absolute', top: props.y }}
-            >
+            <dialog className="featured-tile" style={style} open>
                 <video src={props.mp4} alt={props.title} autoPlay={true} controls />
             </dialog>
         );
