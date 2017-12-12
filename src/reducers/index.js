@@ -10,7 +10,7 @@ const selectedGiphy = (state = {}, action) => {
     }
 };
 
-const giphy = (
+const giphyAPI = (
     state = {
         isFetchingGifs: false,
         images: {}
@@ -40,7 +40,7 @@ const searchTerm = (state = '', action) => {
 // However, mapToProps ultimately decides how the container component will
 // receive the props from the store.
 const rootReducer = combineReducers({
-    giphy,
+    giphyAPI,
     selectedGiphy,
     searchTerm
 });

@@ -55,8 +55,8 @@ class App extends Component {
 
 const mapStateToProps = state => {
     // Whenever the store changes, update the props that are sent to the container
-    const { selectedGiphy, searchTerm, giphy } = state;
-    const { images = {}, isFetchingGifs } = giphy;
+    const { selectedGiphy, searchTerm, giphyAPI } = state;
+    const { images = {}, isFetchingGifs } = giphyAPI;
 
     return {
         selectedGiphy,
